@@ -62,7 +62,7 @@
 
             var callbacks = queue.splice(0, max_requests_per_interval);
             for(var x = 0; x < callbacks.length; x++) {
-                callbacks[x]();
+                callbacks[x].callback(callbacks[x].params);
             }
 
             last_called = Date.now();
@@ -77,8 +77,11 @@
         /**
          * Return a function that can enqueue items.
          */
-        return function(callback) {
-            queue.push(callback);
+        return function(callback, params) {
+            queue.push({
+                callback: callback,
+                params: params
+            });
         };
     };
 
